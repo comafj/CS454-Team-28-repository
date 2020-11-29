@@ -1,15 +1,17 @@
 from selenium import webdriver
 from selenium.webdriver.support.color import Color
+from webdriver_manager.chrome import ChromeDriverManager
 #import time
 #from collections import Counter
 
 def color_element_from_URL(url):
-    browser = webdriver.Chrome()
+    # browser = webdriver.Chrome()
+    browser = webdriver.Chrome(ChromeDriverManager().install())
     browser.get(url)
-    
+
     candi_elems = browser.find_elements_by_xpath("//*[contains (@ style, 'color')]")
     result = []
-    
+
     index = 1
     for ce in candi_elems:
         single_r = [] # single_r 형식 : [index, text element, text color, background element, background color]
