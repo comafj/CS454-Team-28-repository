@@ -8,3 +8,7 @@ This repository is for the team project of 2020 Fall CS454 "AI Based Software En
 ## Color_elem_extraction.py
 This is file for extraction from the URL. Function "color_element_from_URL" gets URL as input and returns list of elements information.
 Each piece of information consists of this: [index, text element, text element's color, background element, background element's color].
+
+## Calculate_fitness_value.py
+This extract criterions to judge whether color combination is good or not.
+Each piece of criterions are [contrast_ratio, background_saturation, background_lightness, golden_rule_satisfaction, number_of_colors]

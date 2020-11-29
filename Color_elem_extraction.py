@@ -36,5 +36,6 @@ def color_element_from_URL(url):
         result.append(single_r)
     return result
 
-test_url = "https://sattamatkamarket.in/"
-print(color_element_from_URL(test_url))
+if __name__ == "__main__":
+    test_url = "https://sattamatkamarket.in/"
+    print(color_element_from_URL(test_url))
