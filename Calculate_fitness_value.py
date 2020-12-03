@@ -7,7 +7,6 @@ from collections import defaultdict
 def get_luminance(r, g, b):
     return 0.2126*r + 0.7152*g + 0.0722*b
 
-
 def calculate_fitness_value(color_elem_list):
     fitness_value_list = [dict() for i in range(len(color_elem_list))]
 
@@ -41,6 +40,12 @@ def calculate_fitness_value(color_elem_list):
         background_area = color_elem[1].size['height'] * color_elem[1].size['width']
         color_set[(foreground_rgba.red, foreground_rgba.blue, foreground_rgba.green)] = foreground_area
         color_set[(background_rgba.red, background_rgba.blue, background_rgba.green)] = background_area
+
+        fitness_value = (min(constrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
+                        (1 - background_saturation) / 0.8 + \
+                        (1 - background_lightness) / 0.8
+
+        fitness_value_list[index]['fitness_value'] = fitness_value
 
     # calculate the number of colors used in UI (Low is better, about 5 is best case)
     number_of_colors = len(color_set)
