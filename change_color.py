@@ -35,10 +35,12 @@ def color_element_from_url(url):
     #browser.quit()
     return result
 
-def change_color(elem, color):
+def change_color(elem, color, char):
 
+    #if char == 
+    #browser.execute_script("arguments[0].setAttribute(arguments[1], arguments[2]);", elem, "style", "background-color:"+color)
     browser.execute_script("arguments[0].setAttribute(arguments[1], arguments[2]);", elem, "style", "color:"+color)
-    #browser.execute_script("document.body.style.backgroundColor = 'blue'; ")
+    
     
 
 
@@ -48,9 +50,13 @@ if __name__ == "__main__":
     browser = webdriver.Chrome(ChromeDriverManager().install())
     browser.get(test_url)
     test_arr = color_element_from_url(test_url)
-    for i in range (len(test_arr)):
+    '''
+    for i in range (len(test_arr)/2):
     	if len(test_arr[i])>2:
-    		change_color(test_arr[i][1], "blue")
+    		change_color(test_arr[i][3], "blue")
     	else:
     		continue
+    '''
+    change_color(test_arr[8][1], "pink")
+    change_color(test_arr[9][1], "blue")
     
