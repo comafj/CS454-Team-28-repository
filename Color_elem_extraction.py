@@ -4,7 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 #import time
 #from collections import Counter
 
-def color_element_from_URL(url):
+def color_element_from_url(url):
     # browser = webdriver.Chrome()
     browser = webdriver.Chrome(ChromeDriverManager().install())
     browser.get(url)
@@ -34,8 +34,9 @@ def color_element_from_URL(url):
         single_r.append(p_back)
         index+=1
         result.append(single_r)
+    #browser.quit()
     return result
 
 if __name__ == "__main__":
     test_url = "https://sattamatkamarket.in/"
-    print(color_element_from_URL(test_url))
+    print(color_element_from_url(test_url))
