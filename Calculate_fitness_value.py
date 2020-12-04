@@ -18,8 +18,8 @@ def calculate_fitness_value(color_elem_list):
 
         # Calculate constrast ratio (High is better)
         # https://medium.muz.li/the-science-of-color-contrast-an-expert-designers-guide-33e84c41d156
-        foreground_luminance = get_luminance(foreground_rgba.red, foreground_rgba.green, foreground_rgba.blue)
-        background_luminance = get_luminance(background_rgba.red, background_rgba.green, background_rgba.blue)
+        foreground_luminance = get_luminance(foreground_rgba.red/256, foreground_rgba.green/256, foreground_rgba.blue/256)
+        background_luminance = get_luminance(background_rgba.red/256, background_rgba.green/256, background_rgba.blue/256)
         l1 = max(foreground_luminance, background_luminance)
         l2 = min(foreground_luminance, background_luminance)
         constrast_ratio = (l1 + 0.05) / (l2 + 0.05)
@@ -29,7 +29,7 @@ def calculate_fitness_value(color_elem_list):
         # Calculate lightness and saturation of background color (Low is better)
         # https://uxmovement.com/content/why-you-should-avoid-bright-saturated-background-colors/
         _, background_lightness, background_saturation = \
-            colorsys.rgb_to_hls(background_rgba.red, background_rgba.green, background_rgba.blue)
+            colorsys.rgb_to_hls(background_rgba.red/256, background_rgba.green/256, background_rgba.blue/256)
         fitness_value_list[index]['background_lightness'] = background_lightness
         fitness_value_list[index]['background_saturation'] = background_saturation
 
@@ -38,8 +38,8 @@ def calculate_fitness_value(color_elem_list):
         # TODO: caluclate area of each element (It is not completed!)
         foreground_area = color_elem[1].size['height'] * color_elem[1].size['width']
         background_area = color_elem[1].size['height'] * color_elem[1].size['width']
-        color_set[(foreground_rgba.red, foreground_rgba.blue, foreground_rgba.green)] = foreground_area
-        color_set[(background_rgba.red, background_rgba.blue, background_rgba.green)] = background_area
+        color_set[(foreground_rgba.red/256, foreground_rgba.blue/256, foreground_rgba.green/256)] = foreground_area
+        color_set[(background_rgba.red/256, background_rgba.blue/256, background_rgba.green/256)] = background_area
 
         fitness_value = (min(constrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
                         (1 - background_saturation) / 0.8 + \
