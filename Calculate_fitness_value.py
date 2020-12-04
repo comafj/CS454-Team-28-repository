@@ -18,8 +18,8 @@ def calculate_fitness_value(color_elem_list):
 
         # Calculate contrast ratio (High is better)
         # https://medium.muz.li/the-science-of-color-contrast-an-expert-designers-guide-33e84c41d156
-        foreground_luminance = get_luminance(foreground_rgba.red/256, foreground_rgba.green/256, foreground_rgba.blue/256)
-        background_luminance = get_luminance(background_rgba.red/256, background_rgba.green/256, background_rgba.blue/256)
+        foreground_luminance = get_luminance(foreground_rgba.red/255, foreground_rgba.green/255, foreground_rgba.blue/255)
+        background_luminance = get_luminance(background_rgba.red/255, background_rgba.green/255, background_rgba.blue/255)
         l1 = max(foreground_luminance, background_luminance)
         l2 = min(foreground_luminance, background_luminance)
         contrast_ratio = (l1 + 0.05) / (l2 + 0.05)
@@ -29,7 +29,7 @@ def calculate_fitness_value(color_elem_list):
         # Calculate lightness and saturation of background color (Low is better)
         # https://uxmovement.com/content/why-you-should-avoid-bright-saturated-background-colors/
         _, background_lightness, background_saturation = \
-            colorsys.rgb_to_hls(background_rgba.red/256, background_rgba.green/256, background_rgba.blue/256)
+            colorsys.rgb_to_hls(background_rgba.red/256, background_rgba.green/255, background_rgba.blue/255)
         fitness_value_list[index]['background_lightness'] = background_lightness
         fitness_value_list[index]['background_saturation'] = background_saturation
 
@@ -38,12 +38,15 @@ def calculate_fitness_value(color_elem_list):
         # TODO: caluclate area of each element (It is not completed!)
         foreground_area = color_elem[1].size['height'] * color_elem[1].size['width']
         background_area = color_elem[1].size['height'] * color_elem[1].size['width']
-        color_set[(foreground_rgba.red/256, foreground_rgba.blue/256, foreground_rgba.green/256)] = foreground_area
-        color_set[(background_rgba.red/256, background_rgba.blue/256, background_rgba.green/256)] = background_area
+        color_set[(foreground_rgba.red/255, foreground_rgba.blue/255, foreground_rgba.green/255)] = foreground_area
+        color_set[(background_rgba.red/255, background_rgba.blue/255, background_rgba.green/255)] = background_area
 
+        # Give high weight for contrast ratio
+        # Set 4.5 as a minimal criteria for contrast ratio
+        # Take square for contrast_ratio because low contrast ratio is terrible
         fitness_value = (min(contrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
-                        (1 - background_saturation) / 0.8 + \
-                        (1 - background_lightness) / 0.8
+                        (1 - background_saturation) + \
+                        (1 - background_lightness)
 
         fitness_value_list[index]['fitness_value'] = fitness_value
 

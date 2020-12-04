@@ -30,8 +30,8 @@ def fitness_value(f_color, b_color):
     # Set 4.5 as a minimal criteria for contrast ratio
     # Take square for contrast_ratio because low contrast ratio is terrible
     fitness_value = (min(constrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
-                    (1 - background_saturation) / 0.8 + \
-                    (1 - background_lightness) / 0.8
+                    (1 - background_saturation) + \
+                    (1 - background_lightness)
 
     return constrast_ratio, background_lightness, background_saturation, fitness_value
 
