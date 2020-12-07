@@ -5,7 +5,14 @@ from collections import defaultdict
 import numpy as np
 import cv2
 
+def linear_to_srgb(c):
+    if c <= 0.0404482362771082:
+        return c/12.92
+    else:
+        return ((c+0.055)/1.055)**2.4
+
 def get_luminance(r, g, b):
+    r, g, b = linear_to_srgb(r), linear_to_srgb(g), linear_to_srgb(b)
     return 0.2126*r + 0.7152*g + 0.0722*b
 
 def fitness_value(f_color, b_color):

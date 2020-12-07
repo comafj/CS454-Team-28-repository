@@ -36,7 +36,7 @@ def calculate_fitness_value(color_elem_list):
         # Calculate lightness and saturation of background color (Low is better)
         # https://uxmovement.com/content/why-you-should-avoid-bright-saturated-background-colors/
         _, background_lightness, background_saturation = \
-            colorsys.rgb_to_hls(background_rgba.red/256, background_rgba.green/255, background_rgba.blue/255)
+            colorsys.rgb_to_hls(background_rgba.red/255, background_rgba.green/255, background_rgba.blue/255)
         fitness_value_list[index]['background_lightness'] = background_lightness
         fitness_value_list[index]['background_saturation'] = background_saturation
 
