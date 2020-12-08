@@ -35,11 +35,12 @@ def color_element_from_url(url):
     #browser.quit()
     return result
 
-def change_color(elem, color, char):
+def change_color(elem, color, cf):
 
-    #if char == 
-    #browser.execute_script("arguments[0].setAttribute(arguments[1], arguments[2]);", elem, "style", "background-color:"+color)
-    browser.execute_script("arguments[0].setAttribute(arguments[1], arguments[2]);", elem, "style", "color:"+color)
+    if cf == 'b':
+        browser.execute_script("arguments[0].setAttribute(arguments[1], arguments[2]);", elem, "style", elem.get_attribute("style")+"background-color:"+color)
+    elif cf == 't':
+        browser.execute_script("arguments[0].setAttribute(arguments[1], arguments[2]);", elem, "style", elem.get_attribute("style")+"color:"+color)
     
     
 
@@ -57,6 +58,7 @@ if __name__ == "__main__":
     	else:
     		continue
     '''
-    change_color(test_arr[8][1], "pink")
-    change_color(test_arr[9][1], "blue")
+    change_color(test_arr[8][1], "pink", 'b')
+    change_color(test_arr[9][1], "blue", 'b')
     
+
