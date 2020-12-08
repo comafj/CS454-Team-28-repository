@@ -12,3 +12,6 @@ Each piece of information consists of this: [index, text element, text element's
 ## Calculate_fitness_value.py
 This extract criterions to judge whether color combination is good or not.
 Each piece of criterions are [contrast_ratio, background_saturation, background_lightness, golden_rule_satisfaction, number_of_colors]
+
+## Local_search.py
+This is file for finding near RGB value set. Start with some RGB value dictionary, find some local neighbours of it.
