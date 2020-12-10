@@ -4,10 +4,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 #import time
 #from collections import Counter
 
-def color_element_from_url(url):
+def color_element_from_url(browser, url):
     # browser = webdriver.Chrome()
-    browser = webdriver.Chrome(ChromeDriverManager().install())
-    browser.get(url)
+    # browser = webdriver.Chrome(ChromeDriverManager().install())
+    # browser.get(url)
 
     candi_elems = browser.find_elements_by_xpath("//*[contains (@ style, 'color')]")
     result = []
@@ -39,4 +39,7 @@ def color_element_from_url(url):
 
 if __name__ == "__main__":
     test_url = "https://sattamatkamarket.in/"
-    print(color_element_from_url(test_url))
+    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser.get(test_url)
+
+    print(color_element_from_url(browser, test_url))

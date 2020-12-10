@@ -35,7 +35,7 @@ def color_element_from_url(url):
     #browser.quit()
     return result
 
-def change_color(elem, color, cf):
+def change_color(browser, elem, color, cf):
 
     if cf == 'b':
         browser.execute_script("arguments[0].setAttribute(arguments[1], arguments[2]);", elem, "style", elem.get_attribute("style")+"background-color:"+color)
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     	else:
     		continue
     '''
-    change_color(test_arr[8][1], "pink", 'b')
-    change_color(test_arr[9][1], "blue", 'b')
+    change_color(browser, test_arr[8][1], "pink", 'b')
+    change_color(browser, test_arr[9][1], "#0000FF", 'b')
     
 

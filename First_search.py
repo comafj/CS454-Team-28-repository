@@ -3,6 +3,8 @@ import Calculate_fitness_value as Cfv
 from selenium.webdriver.support.color import Color
 import Local_search as ls
 import random
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 print("First search start")
@@ -76,15 +78,16 @@ def do_step_search(color_result, fit_dict):
 
     ############################ New version ##################################
     wall_around = ls.large_step(fdict, 1, 1) + ls.large_step(fdict, 1, 10) + ls.large_step(fdict, 1, 50) + \
-                  ls.large_step(fdict, 1, 100) + ls.large_step(fdict, 1, 200)
+                  ls.large_step(fdict, 1, 100) # + ls.large_step(fdict, 1, 200)
 
     wfit_list = []
     wall_result = []
     for wa in wall_around:
         to_color = cdict_to_color(wa)
-        new_single_r = color_result
+        new_single_r = color_result # Because it is shallow copy, all new_single_r are same instances.
         new_single_r[2] = to_color
-        wall_result.append(new_single_r)
+        # wall_result.append(new_single_r)
+        wall_result.append(to_color)
         wfit_list += Cfv.calculate_fitness_value([new_single_r])
 
     # wfit_list = Cfv.calculate_fitness_value(wall_result)
@@ -96,17 +99,20 @@ def do_step_search(color_result, fit_dict):
     max_fitness_color = None
     for wr, wfl in zip(wall_result, wfit_list):
         if wfl['fitness_value'] > fit_dict['fitness_value']:
-            bp = wr[2]
+            # bp = wr[2]
+            bp = wr
             better_points.append(bp)
             if wfl['fitness_value'] > max_fitness:
                 max_fitness = wfl['fitness_value']
                 max_fitness_color = bp
+                print(max_fitness, max_fitness_color)
 
     if len(better_points) > 0:
         print("NO RANDOM")
         print(f"current fitness value = {fit_dict['fitness_value']}")
         print(f"improved fitness value = {max_fitness}")
         print(f"Then foreground color will be {max_fitness_color}")
+        print(f"And, background color will be {background_rgba}")
 
     if len(better_points) == 0:
         #print("randomly assign")
@@ -115,23 +121,26 @@ def do_step_search(color_result, fit_dict):
         for i in range(5):
             better_points.append(copy_list[i][2])
 
-    #print(better_points)
+    print(len(better_points))
 
-    return 1
+    return max_fitness_color, max_fitness
 
+if __name__ == "__main__":
+    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser.get(test_url_1)
 
-Cee_result = Cee.color_element_from_url(test_url_1)
-# print(len(Cee_result))
-fit_dict_list = Cfv.calculate_fitness_value(Cee_result)
-# print(len(fit_dict_list))
-#for cr, fdl in zip(Cee_result, fit_dict_list):
-#    # print(fdl['fitness_value'])
-#    if fdl['fitness_value'] < fitness_th:
-#        print("DOING LOCAL SEARCH...")
-#        dls = do_local_search(cr, fdl)
-#        print(dls[0] - fdl['fitness_value'])
+    Cee_result = Cee.color_element_from_url(browser, test_url_1)
+    # print(len(Cee_result))
+    fit_dict_list = Cfv.calculate_fitness_value(Cee_result)
+    # print(len(fit_dict_list))
+    #for cr, fdl in zip(Cee_result, fit_dict_list):
+    #    # print(fdl['fitness_value'])
+    #    if fdl['fitness_value'] < fitness_th:
+    #        print("DOING LOCAL SEARCH...")
+    #        dls = do_local_search(cr, fdl)
+    #        print(dls[0] - fdl['fitness_value'])
 
-for cr, fdl in zip(Cee_result, fit_dict_list):
-    if fdl['fitness_value'] < fitness_th:
-        print("DOING STEP SEARCH...")
-        dss = do_step_search(cr, fdl)
+    for cr, fdl in zip(Cee_result, fit_dict_list):
+        if fdl['fitness_value'] < fitness_th:
+            print("DOING STEP SEARCH...")
+            dss = do_step_search(cr, fdl)
