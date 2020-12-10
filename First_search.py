@@ -1,7 +1,9 @@
 import Color_elem_extraction as Cee
 import Calculate_fitness_value as Cfv
-import Test_fitness_function as Tff
 from selenium.webdriver.support.color import Color
+import Local_search as ls
+import random
+
 
 print("First search start")
 test_url_1 = "https://sattamatkamarket.in/"
@@ -28,27 +30,89 @@ def do_local_search(color_result, fit_dict):
     new_fit_dict = fit_dict
     foreground_rgba = color_result[2]
     background_rgba = color_result[4]
-    # print("DOING LOCAL SEARCH...")
-    # print(foreground_rgba)
+
     fdict = color_to_cdict(foreground_rgba)
-    # print(fdict)
+    bdict = color_to_cdict(background_rgba)
 
     # Place where searching process should be implemented
-    fdict['red'] = 123
+    # COMPACT FIND
+    local_dict_list = ls.compact_find(fdict, 100)
+    local_result = []
+    for ld in local_dict_list:
+        to_color = cdict_to_color(ld)
+        new_single_r = color_result
+        new_single_r[2] = to_color
+        local_result.append(new_single_r)
+
+    lfit_list = Cfv.calculate_fitness_value(local_result)
+    max_result = [fit_dict['fitness_value'], foreground_rgba]
+
+    for lr, lfl in zip(local_result, lfit_list):
+        if lfl['fitness_value'] > max_result[0]:
+            max_result[0] = lfl['fitness_value']
+            max_result[1] = lr[2]
+    return max_result
+
     # Place where searching process should be implemented
 
-    new_rgba = cdict_to_color(fdict)
-    # print(new_rgba)
-    # print(foreground_rgba)
-    # print(background_rgba)
+
+def do_step_search(color_result, fit_dict):
+    foreground_rgba = color_result[2]
+    print(foreground_rgba)
+    background_rgba = color_result[4]
+    fdict = color_to_cdict(foreground_rgba)
+
+    # Local_search의 large_step function을 활용하는 데 큰 범위로 한 번 탐색하여 결과가 좋은 것들을 저장하고
+    # 위의 결과들 각각을 중심으로 한번더 작은 범위로 탐색한다
+    # 이 두번의 탐색에서 가장 좋은 점수를 얻은 색을 max_result에 넣어 반환한다
+    wall_first = ls.large_step(fdict, 4, 1)
+    wall = ls.large_step(fdict, 4, 2)
+    wall_second = ls.large_step(fdict, 4, 4)
+    walll = ls.large_step(fdict, 4, 8)
+    wall_third = ls.large_step(fdict, 4, 16)
+    wall_around = wall_first + wall_second + wall_third + wall + walll
+
+    wall_result = []
+    for wa in wall_around:
+        to_color = cdict_to_color(wa)
+        new_single_r = color_result
+        new_single_r[2] = to_color
+        wall_result.append(new_single_r)
+    wfit_list = Cfv.calculate_fitness_value(wall_result)
+    max_result = [fit_dict['fitness_value'], foreground_rgba]
+
+    better_points = []
+    for wr, wfl in zip(wall_result, wfit_list):
+        if wfl['fitness_value'] > fit_dict['fitness_value']:
+            bp = wr[2]
+            better_points.append(bp)
+    if len(better_points) > 0:
+        print("NO RANDOM")
+
+    if len(better_points) == 0:
+        #print("randomly assign")
+        copy_list = wall_result
+        random.shuffle(copy_list)
+        for i in range(5):
+            better_points.append(copy_list[i][2])
+
+    #print(better_points)
+
+    return 1
 
 
 Cee_result = Cee.color_element_from_url(test_url_1)
 # print(len(Cee_result))
 fit_dict_list = Cfv.calculate_fitness_value(Cee_result)
 # print(len(fit_dict_list))
+#for cr, fdl in zip(Cee_result, fit_dict_list):
+#    # print(fdl['fitness_value'])
+#    if fdl['fitness_value'] < fitness_th:
+#        print("DOING LOCAL SEARCH...")
+#        dls = do_local_search(cr, fdl)
+#        print(dls[0] - fdl['fitness_value'])
+
 for cr, fdl in zip(Cee_result, fit_dict_list):
-    print(fdl['fitness_value'])
     if fdl['fitness_value'] < fitness_th:
-        # print(fdl['contrast_ratio'])
-        do_local_search(cr, fdl)
+        print("DOING STEP SEARCH...")
+        dss = do_step_search(cr, fdl)
