@@ -28,6 +28,8 @@ def fitness_value(f_color, b_color):
     print(l1, l2)
 
     constrast_ratio = (l1 + 0.05) / (l2 + 0.05)
+    max_contrast_ratio = max((1 + 0.05) / (b_luminance + 0.05), (b_luminance + 0.05) / (0.05))
+    print(max_contrast_ratio)
 
     _, background_lightness, background_saturation = colorsys.rgb_to_hls(b_r, b_g, b_b)
 
@@ -36,7 +38,10 @@ def fitness_value(f_color, b_color):
     # Give high weight for contrast ratio
     # Set 4.5 as a minimal criteria for contrast ratio
     # Take square for contrast_ratio because low contrast ratio is terrible
-    fitness_value = (min(constrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
+    # fitness_value = (min(constrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
+    #                 (1 - background_saturation) + \
+    #                 (1 - background_lightness)
+    fitness_value = (constrast_ratio / max_contrast_ratio) * 2 + \
                     (1 - background_saturation) + \
                     (1 - background_lightness)
 
@@ -44,7 +49,7 @@ def fitness_value(f_color, b_color):
 
 if __name__ == "__main__":
     f_color = (0, 0, 0)
-    b_color = (255, 240, 240)
+    b_color = (255, 255, 255)
 
     fonts = cv2.FONT_HERSHEY_SIMPLEX
 

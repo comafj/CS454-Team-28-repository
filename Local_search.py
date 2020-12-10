@@ -52,13 +52,22 @@ def compact_find(cdict, n_search):
         dict_set.append(new_dict)
     return dict_set
 
+def possible_way2():
+    ret = []
+    for i in [-1, 0, 1]:
+        for j in [-1, 0, 1]:
+            for k in [-1, 0, 1]:
+                ret.append([i, j, k])
+    return ret
+
 # cdict를 중앙으로 하여 큰 범위를 탐색하고 그 결과를 반환 하는 function
 # dictionary cdict는 탐색 기준이 되는 rgb 평면 상의 점을 나타낸다
 # int base는 cdict를 기준으로 퍼져나갈 때 몇 가지 방향성을 사용할 것인지를 결정한다
 # int size는 base에 의한 방향성을 기준으로 몇 배수를 탐색할 것인지 나타낸다
 def large_step(cdict, base, size):
     dict_set = []
-    base_vectors = possible_way(base)
+    # base_vectors = possible_way(base) # Previous version
+    base_vectors = possible_way2()      # New version
     sized_vectors = [[size*val for val in bv] for bv in base_vectors]
 
     red_val = cdict['red']

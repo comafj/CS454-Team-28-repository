@@ -30,6 +30,7 @@ def calculate_fitness_value(color_elem_list):
         l1 = max(foreground_luminance, background_luminance)
         l2 = min(foreground_luminance, background_luminance)
         contrast_ratio = (l1 + 0.05) / (l2 + 0.05)
+        max_contrast_ratio = max((1 + 0.05) / (background_luminance + 0.05), (background_luminance + 0.05) / (0.05))
         fitness_value_list[index]['contrast_ratio'] = contrast_ratio
 
 
@@ -51,7 +52,14 @@ def calculate_fitness_value(color_elem_list):
         # Give high weight for contrast ratio
         # Set 4.5 as a minimal criteria for contrast ratio
         # Take square for contrast_ratio because low contrast ratio is terrible
-        fitness_value = (min(contrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
+
+        # Previous version of fitness_value
+        # fitness_value = (min(contrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
+        #                 (1 - background_saturation) + \
+        #                 (1 - background_lightness)
+
+        # New version of fitness_value
+        fitness_value = (contrast_ratio / max_contrast_ratio) * 2 + \
                         (1 - background_saturation) + \
                         (1 - background_lightness)
 

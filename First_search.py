@@ -65,29 +65,48 @@ def do_step_search(color_result, fit_dict):
     # Local_search의 large_step function을 활용하는 데 큰 범위로 한 번 탐색하여 결과가 좋은 것들을 저장하고
     # 위의 결과들 각각을 중심으로 한번더 작은 범위로 탐색한다
     # 이 두번의 탐색에서 가장 좋은 점수를 얻은 색을 max_result에 넣어 반환한다
-    wall_first = ls.large_step(fdict, 4, 1)
-    wall = ls.large_step(fdict, 4, 2)
-    wall_second = ls.large_step(fdict, 4, 4)
-    walll = ls.large_step(fdict, 4, 8)
-    wall_third = ls.large_step(fdict, 4, 16)
-    wall_around = wall_first + wall_second + wall_third + wall + walll
 
+    ############################ Previous version ##################################
+    # wall_first = ls.large_step(fdict, 4, 1)
+    # wall = ls.large_step(fdict, 4, 2)
+    # wall_second = ls.large_step(fdict, 4, 4)
+    # walll = ls.large_step(fdict, 4, 8)
+    # wall_third = ls.large_step(fdict, 4, 16)
+    # wall_around = wall_first + wall_second + wall_third + wall + walll
+
+    ############################ New version ##################################
+    wall_around = ls.large_step(fdict, 1, 1) + ls.large_step(fdict, 1, 10) + ls.large_step(fdict, 1, 50) + \
+                  ls.large_step(fdict, 1, 100) + ls.large_step(fdict, 1, 200)
+
+    wfit_list = []
     wall_result = []
     for wa in wall_around:
         to_color = cdict_to_color(wa)
         new_single_r = color_result
         new_single_r[2] = to_color
         wall_result.append(new_single_r)
-    wfit_list = Cfv.calculate_fitness_value(wall_result)
+        wfit_list += Cfv.calculate_fitness_value([new_single_r])
+
+    # wfit_list = Cfv.calculate_fitness_value(wall_result)
+    print(wfit_list)
     max_result = [fit_dict['fitness_value'], foreground_rgba]
 
     better_points = []
+    max_fitness = 0
+    max_fitness_color = None
     for wr, wfl in zip(wall_result, wfit_list):
         if wfl['fitness_value'] > fit_dict['fitness_value']:
             bp = wr[2]
             better_points.append(bp)
+            if wfl['fitness_value'] > max_fitness:
+                max_fitness = wfl['fitness_value']
+                max_fitness_color = bp
+
     if len(better_points) > 0:
         print("NO RANDOM")
+        print(f"current fitness value = {fit_dict['fitness_value']}")
+        print(f"improved fitness value = {max_fitness}")
+        print(f"Then foreground color will be {max_fitness_color}")
 
     if len(better_points) == 0:
         #print("randomly assign")
