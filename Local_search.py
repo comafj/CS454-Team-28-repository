@@ -85,14 +85,35 @@ def large_step(cdict, base, size):
         dict_set.append(new_dict)
     return dict_set
 
-def small_step(cdict):
 
-    return 0
+def small_step(cdict, base, size):
+    dict_set = []
+    base_vectors = possible_way(base)
+    sized_vectors = [[size*val for val in bv] for bv in base_vectors]
 
+    red_val = cdict['red']
+    green_val = cdict['green']
+    blue_val = cdict['blue']
+
+    for sv in sized_vectors:
+        red_add = sv[0]
+        green_add = sv[1]
+        blue_add = sv[2]
+        if rgb_boundary(red_val, red_add) or rgb_boundary(green_val, green_add) or rgb_boundary(blue_val, blue_add):
+            continue
+        new_dict = {'red': red_val + red_add, 'green': green_val + green_add,
+                    'blue': blue_val + blue_add, 'alpha': cdict['alpha']}
+        dict_set.append(new_dict)
+    return dict_set
 
 
 tdict = {'red': 100, 'green': 100, 'blue': 100, 'alpha': 1}
 elem_length = 2
+#print(len(small_step(tdict, 1, 1)))
+#print(len(small_step(tdict, 2, 1)))
+#print(len(small_step(tdict, 3, 1)))
+#print(len(small_step(tdict, 4, 1)))
+#print(len(small_step(tdict, 8, 1)))
 #print(len(large_step(tdict, 4, 1)))
 
 #print(len(large_step(tdict, elem_length, 2)))

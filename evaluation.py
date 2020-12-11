@@ -20,8 +20,8 @@ fitness_th = 3 # A standard for how bad the user would consider bad
 
 if __name__ == "__main__":
     browser = webdriver.Chrome(ChromeDriverManager().install())
-    browser.get("C:\CS454-Team-28-repository\worst_web_page_example.html")
-
+    # browser.get("C:\CS454-Team-28-repository\worst_web_page_example.html") # Beomsik repo
+    browser.get("C:\Users\황민선\Desktop\20년도 가을학기\Sbse\CS454-Team-28-repository\worst_web_page_example.html") # Minseon repo
     Cee_result = Cee.color_element_from_url(browser, test_url_1)
     # print(len(Cee_result))
     fit_dict_list = Cfv.calculate_fitness_value(Cee_result)

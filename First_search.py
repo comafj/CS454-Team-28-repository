@@ -27,8 +27,7 @@ def cdict_to_color(cdict):
     return color
 
 
-# TODO : We should implement how to perform local search asap
-def do_local_search(color_result, fit_dict):
+def do_compact_search(color_result, fit_dict):
     new_fit_dict = fit_dict
     foreground_rgba = color_result[2]
     background_rgba = color_result[4]
@@ -80,8 +79,8 @@ def do_step_search(color_result, fit_dict):
     wall_around = ls.large_step(fdict, 1, 1) + ls.large_step(fdict, 1, 10) + ls.large_step(fdict, 1, 50) + \
                   ls.large_step(fdict, 1, 100) # + ls.large_step(fdict, 1, 200)
 
-    wfit_list = []
     wall_result = []
+    wfit_list = []
     for wa in wall_around:
         to_color = cdict_to_color(wa)
         new_single_r = color_result # Because it is shallow copy, all new_single_r are same instances.
@@ -115,15 +114,50 @@ def do_step_search(color_result, fit_dict):
         print(f"And, background color will be {background_rgba}")
 
     if len(better_points) == 0:
-        #print("randomly assign")
+        print("It's RANDOM")
         copy_list = wall_result
         random.shuffle(copy_list)
         for i in range(5):
-            better_points.append(copy_list[i][2])
+            better_points.append(copy_list[i])
 
     print(len(better_points))
+    bp_dict = [color_to_cdict(bp) for bp in better_points]
+    adj_points = []
+    for bd in bp_dict:
+        adj_points += ls.small_step(bd, 1, 1) + ls.small_step(bd, 2, 1) + ls.small_step(bd, 3, 1)
+    a_result = []
+    afit_list = []
 
-    return max_fitness_color, max_fitness
+    for ap in adj_points:
+        to_color = cdict_to_color(ap)
+        new_single_r = color_result # Because it is shallow copy, all new_single_r are same instances.
+        new_single_r[2] = to_color
+        # wall_result.append(new_single_r)
+        a_result.append(to_color)
+        afit_list += Cfv.calculate_fitness_value([new_single_r])
+
+    last_points = []
+    max_max_fitness = 0
+    max_max_fitness_color = None
+    for ar, afl in zip(a_result, afit_list):
+        if afl['fitness_value'] > fit_dict['fitness_value']:
+            # bp = wr[2]
+            bp = ar
+            last_points.append(bp)
+            if afl['fitness_value'] > max_max_fitness:
+                max_max_fitness = afl['fitness_value']
+                max_max_fitness_color = bp
+                # print(max_max_fitness, max_max_fitness_color)
+
+    if len(last_points) > 0:
+        print("LAST RESULT")
+        # print(f"current fitness value = {fit_dict['fitness_value']}")
+        print(f"improved fitness value = {max_max_fitness}")
+        print(f"Then foreground color will be {max_max_fitness_color}")
+        print(f"And, background color will be {background_rgba}")
+
+    return max_max_fitness_color, max_max_fitness
+
 
 if __name__ == "__main__":
     browser = webdriver.Chrome(ChromeDriverManager().install())
@@ -137,7 +171,7 @@ if __name__ == "__main__":
     #    # print(fdl['fitness_value'])
     #    if fdl['fitness_value'] < fitness_th:
     #        print("DOING LOCAL SEARCH...")
-    #        dls = do_local_search(cr, fdl)
+    #        dls = do_compact_search(cr, fdl)
     #        print(dls[0] - fdl['fitness_value'])
 
     for cr, fdl in zip(Cee_result, fit_dict_list):
