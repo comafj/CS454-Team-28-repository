@@ -24,16 +24,9 @@ if __name__ == "__main__":
     browser.get("C:\Users\황민선\Desktop\20년도 가을학기\Sbse\CS454-Team-28-repository\worst_web_page_example.html") # Minseon repo
     # get color elemenets from url
     Cee_result = Cee.color_element_from_url(browser, test_url_1)
-    # print(len(Cee_result))
+
     # calculate fitness values of color elements.
     fit_dict_list = Cfv.calculate_fitness_value(Cee_result)
-    # print(len(fit_dict_list))
-    #for cr, fdl in zip(Cee_result, fit_dict_list):
-    #    # print(fdl['fitness_value'])
-    #    if fdl['fitness_value'] < fitness_th:
-    #        print("DOING LOCAL SEARCH...")
-    #        dls = do_local_search(cr, fdl)
-    #        print(dls[0] - fdl['fitness_value'])
 
     total_issues = 0
     solved_issues = 0

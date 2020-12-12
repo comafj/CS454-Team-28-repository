@@ -1,4 +1,3 @@
-import Color_elem_extraction
 from Color_elem_extraction import color_element_from_url
 import colorsys
 from collections import defaultdict
@@ -57,11 +56,6 @@ def calculate_fitness_value(color_elem_list):
         # Set 4.5 as a minimal criteria for contrast ratio
         # Take square for contrast_ratio because low contrast ratio is terrible
 
-        # Previous version of fitness_value
-        # fitness_value = (min(contrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
-        #                 (1 - background_saturation) + \
-        #                 (1 - background_lightness)
-
         # New version of fitness_value
         fitness_value = (contrast_ratio / max_contrast_ratio) * 2 + \
                         (1 - background_saturation) + \
@@ -71,10 +65,6 @@ def calculate_fitness_value(color_elem_list):
 
     # calculate the number of colors used in UI (Low is better, about 5 is best case)
     number_of_colors = len(color_set)
-
-    # TODO: how to define fitness value?
-    #print(number_of_colors)
-    #print(color_set)
 
     return fitness_value_list
 

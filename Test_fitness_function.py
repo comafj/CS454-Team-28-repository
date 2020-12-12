@@ -1,7 +1,4 @@
-import Color_elem_extraction
-from Color_elem_extraction import color_element_from_url
 import colorsys
-from collections import defaultdict
 import numpy as np
 import cv2
 
@@ -38,9 +35,6 @@ def fitness_value(f_color, b_color):
     # Give high weight for contrast ratio
     # Set 4.5 as a minimal criteria for contrast ratio
     # Take square for contrast_ratio because low contrast ratio is terrible
-    # fitness_value = (min(constrast_ratio, 4.5) / 4.5) ** 2 * 2 + \
-    #                 (1 - background_saturation) + \
-    #                 (1 - background_lightness)
     fitness_value = (constrast_ratio / max_contrast_ratio) * 2 + \
                     (1 - background_saturation) + \
                     (1 - background_lightness)

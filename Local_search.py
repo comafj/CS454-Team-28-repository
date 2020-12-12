@@ -52,6 +52,7 @@ def compact_find(cdict, n_search):
         dict_set.append(new_dict)
     return dict_set
 
+# It makes total 27 directions to search
 def possible_way2():
     ret = []
     for i in [-1, 0, 1]:
