@@ -22,8 +22,10 @@ if __name__ == "__main__":
     browser = webdriver.Chrome(ChromeDriverManager().install())
     # browser.get("C:\CS454-Team-28-repository\worst_web_page_example.html") # Beomsik repo
     browser.get("C:\Users\황민선\Desktop\20년도 가을학기\Sbse\CS454-Team-28-repository\worst_web_page_example.html") # Minseon repo
+    # get color elemenets from url
     Cee_result = Cee.color_element_from_url(browser, test_url_1)
     # print(len(Cee_result))
+    # calculate fitness values of color elements.
     fit_dict_list = Cfv.calculate_fitness_value(Cee_result)
     # print(len(fit_dict_list))
     #for cr, fdl in zip(Cee_result, fit_dict_list):
@@ -36,21 +38,23 @@ if __name__ == "__main__":
     total_issues = 0
     solved_issues = 0
 
+    # For each elements, search new color which can improve fitness value.
     for i, (cr, fdl) in enumerate(zip(Cee_result, fit_dict_list)):
         if fdl['fitness_value'] < fitness_th:
             total_issues += 1
 
-
+            # Search new color.
             print("DOING STEP SEARCH...")
             max_fitness_color, max_fitness = First_search.do_step_search(cr, fdl)
 
-
+            # Count it if it solves the color problem.
             if max_fitness > fitness_th:
                 solved_issues += 1
             red = ('0x%0.2X' % max_fitness_color.red)[2:]
             green = ('0x%0.2X' % max_fitness_color.green)[2:]
             blue = ('0x%0.2X' % max_fitness_color.blue)[2:]
             to_color = f"#{red}{green}{blue}"
+            # Change the color of elements to solve color problem.
             change_color.change_color(browser, Cee_result[i][1], to_color, "t")
 
     print(f"Solved {solved_issues}/{total_issues} issues.")

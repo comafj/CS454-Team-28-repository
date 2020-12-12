@@ -107,6 +107,7 @@ def do_step_search(color_result, fit_dict):
                 print(max_fitness, max_fitness_color)
 
     if len(better_points) > 0:
+        # print improved fitness
         print("NO RANDOM")
         print(f"current fitness value = {fit_dict['fitness_value']}")
         print(f"improved fitness value = {max_fitness}")

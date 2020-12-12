@@ -5,16 +5,20 @@ from collections import defaultdict
 
 
 def linear_to_srgb(c):
+    # luminance should be calculated using sRGB
+    # Below code converts linear RGB to sRGB.
     if c <= 0.0404482362771082:
         return c/12.92
     else:
         return ((c+0.055)/1.055)**2.4
 
 def get_luminance(r, g, b):
+    # Calculate luminance of the color
     r, g, b = linear_to_srgb(r), linear_to_srgb(g), linear_to_srgb(b)
     return 0.2126*r + 0.7152*g + 0.0722*b
 
 def calculate_fitness_value(color_elem_list):
+    # Calculate fitness value of color elements.
     fitness_value_list = [dict() for i in range(len(color_elem_list))]
 
     color_set = defaultdict(int)
