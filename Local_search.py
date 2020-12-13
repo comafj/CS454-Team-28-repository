@@ -1,3 +1,8 @@
+# This function finds possible way vector from RGB space
+# Suppose that RGB space as 3 dimensional space which each axis are R, G, B from 0 to 255
+# Then we can use vector representation to indicate some movements
+# It gets 'length' as a input which indicates manhattan distance in 3D dimension
+# and return possible vector representation
 def possible_way(length):
     result = []
     first_range = range(-length, length + 1)
@@ -11,6 +16,17 @@ def possible_way(length):
             if k_fix_abs > 0:
                 result.append([i, j, -k_fix_abs])
     return result
+
+
+# This function is the simplest version of possible_way
+# It does not use any input, but return all possible way which each movements are in range from -1 to 1
+def possible_way2():
+    ret = []
+    for i in [-1, 0, 1]:
+        for j in [-1, 0, 1]:
+            for k in [-1, 0, 1]:
+                ret.append([i, j, k])
+    return ret
 
 
 # Function to check rgb boundary condition
@@ -27,9 +43,8 @@ def rgb_boundary(value, delta):
 
 
 # Function compact_find(cdict, n_search):
-# cdict가 나타내는 점을 기준으로 manhattan distance가 1인 점들, 2인 점들, ... 차례로 늘려나가며
-# 최종적으로는 항상 n_search개의 결과를 출력한다
-# 즉 cdict로부터 가장 가까운 n_search개의 점들에 대해 탐색하는 방법
+# Finding method of n_search closest points
+# from c_dict which indicates single RGB space point
 def compact_find(cdict, n_search):
     dict_set = []
     candidate_list = []
@@ -52,23 +67,13 @@ def compact_find(cdict, n_search):
         dict_set.append(new_dict)
     return dict_set
 
-# It makes total 27 directions to search
-def possible_way2():
-    ret = []
-    for i in [-1, 0, 1]:
-        for j in [-1, 0, 1]:
-            for k in [-1, 0, 1]:
-                ret.append([i, j, k])
-    return ret
 
-# cdict를 중앙으로 하여 큰 범위를 탐색하고 그 결과를 반환 하는 function
-# dictionary cdict는 탐색 기준이 되는 rgb 평면 상의 점을 나타낸다
-# int base는 cdict를 기준으로 퍼져나갈 때 몇 가지 방향성을 사용할 것인지를 결정한다
-# int size는 base에 의한 방향성을 기준으로 몇 배수를 탐색할 것인지 나타낸다
-def large_step(cdict, base, size):
+# Helper function for finding method by search LARGE and small range in turn
+# cdict means single RGB space point
+# size means how far the movements will go
+def large_step(cdict, size):
     dict_set = []
-    # base_vectors = possible_way(base) # Previous version
-    base_vectors = possible_way2()      # New version
+    base_vectors = possible_way2()
     sized_vectors = [[size*val for val in bv] for bv in base_vectors]
 
     red_val = cdict['red']
@@ -87,6 +92,10 @@ def large_step(cdict, base, size):
     return dict_set
 
 
+# Helper function for finding method by search large and SMALL range in turn
+# cdict means single RGB space point
+# base means how far it is going to base it on
+# size means how far the movements will go
 def small_step(cdict, base, size):
     dict_set = []
     base_vectors = possible_way(base)
@@ -106,28 +115,3 @@ def small_step(cdict, base, size):
                     'blue': blue_val + blue_add, 'alpha': cdict['alpha']}
         dict_set.append(new_dict)
     return dict_set
-
-
-tdict = {'red': 100, 'green': 100, 'blue': 100, 'alpha': 1}
-elem_length = 2
-#print(len(small_step(tdict, 1, 1)))
-#print(len(small_step(tdict, 2, 1)))
-#print(len(small_step(tdict, 3, 1)))
-#print(len(small_step(tdict, 4, 1)))
-#print(len(small_step(tdict, 8, 1)))
-#print(len(large_step(tdict, 4, 1)))
-
-#print(len(large_step(tdict, elem_length, 2)))
-#print(len(large_step(tdict, elem_length, 5)))
-#print(len(large_step(tdict, elem_length, 10)))
-#print(len(large_step(tdict, 3, 2)))
-#one_step = possible_way(elem_length)
-#print(len(one_step))
-#ttt = compact_find(tdict, 10)
-#print(len(ttt), ttt)
-
-#sum = 0
-#for i in range(15):
-#    temp = possible_way(i+1)
-#    sum+=len(temp)
-#    print((i+1, len(temp), sum))
