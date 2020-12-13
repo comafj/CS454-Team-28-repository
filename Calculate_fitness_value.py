@@ -1,4 +1,3 @@
-import Color_elem_extraction
 from Color_elem_extraction import color_element_from_url
 import colorsys
 from collections import defaultdict

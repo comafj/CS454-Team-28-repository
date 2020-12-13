@@ -20,9 +20,10 @@ fitness_th = 3 # A standard for how bad the user would consider bad
 
 if __name__ == "__main__":
     browser = webdriver.Chrome(ChromeDriverManager().install())
-    # browser.get("C:\CS454-Team-28-repository\worst_web_page_example.html") # Beomsik repo
-    browser.get("C:\Users\황민선\Desktop\20년도 가을학기\Sbse\CS454-Team-28-repository\worst_web_page_example.html") # Minseon repo
-    # get color elemenets from url
+    # Project repository, it can be different
+    # browser.get("C:/CS454-Team-28-repository/worst_web_page_example.html")
+    browser.get("C:/CS454-Team-28-repository/example_1.html")
+    # get color elements from url
     Cee_result = Cee.color_element_from_url(browser, test_url_1)
     # print(len(Cee_result))
     # calculate fitness values of color elements.
@@ -37,6 +38,7 @@ if __name__ == "__main__":
 
     total_issues = 0
     solved_issues = 0
+    improve_ratio = 1.2
 
     # For each elements, search new color which can improve fitness value.
     for i, (cr, fdl) in enumerate(zip(Cee_result, fit_dict_list)):
@@ -48,7 +50,7 @@ if __name__ == "__main__":
             max_fitness_color, max_fitness = First_search.do_step_search(cr, fdl)
 
             # Count it if it solves the color problem.
-            if max_fitness > fitness_th:
+            if max_fitness > improve_ratio * fdl['fitness_value']:
                 solved_issues += 1
             red = ('0x%0.2X' % max_fitness_color.red)[2:]
             green = ('0x%0.2X' % max_fitness_color.green)[2:]
