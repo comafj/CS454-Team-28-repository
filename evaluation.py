@@ -22,7 +22,7 @@ if __name__ == "__main__":
     browser = webdriver.Chrome(ChromeDriverManager().install())
     # Project repository, it can be different
     # browser.get("C:/CS454-Team-28-repository/worst_web_page_example.html")
-    browser.get("C:/CS454-Team-28-repository/example_1.html")
+    browser.get("C:/CS454-Team-28-repository/example_4.html")
     # get color elements from url
     Cee_result = Cee.color_element_from_url(browser, test_url_1)
     # print(len(Cee_result))

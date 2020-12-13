@@ -18,7 +18,6 @@ def color_element_from_url(browser, url):
         # If there is no text, continue to next element
         if ce.text == "":
             continue
-        print(ce.text)
         # single_r format : [index, text element, text color, background element, background color]
         single_r = []
         single_r.append(index)
