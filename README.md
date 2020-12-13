@@ -18,3 +18,9 @@ This is file for finding near RGB value set. Start with some RGB value dictionar
 
 ## evalutation.py
 This is file which contains main function. It executes whole pipeline to solve color issues in HTML file, and print the result of evaluation.
+
+## Change_color.py
+This file contains a function that changes color. Enter the Web Element as input. Change the font color or background color of the that element.
+
+## Clustering.py
+This file contains a function that clusters elements with RGB values. At second search, we wanted to match the golden ratio of the colors that make up the page. The golden ratio is 6:3:1. We created this file to check the ratio.
