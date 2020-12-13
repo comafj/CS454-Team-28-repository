@@ -15,3 +15,6 @@ Each piece of criterions are [contrast_ratio, background_saturation, background_
 
 ## Local_search.py
 This is file for finding near RGB value set. Start with some RGB value dictionary, find some local neighbours of it.
+
+## evalutation.py
+This is file which contains main function. It executes whole pipeline to solve color issues in HTML file, and print the result of evaluation.
