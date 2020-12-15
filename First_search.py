@@ -58,8 +58,12 @@ def do_compact_search(color_result, fit_dict):
 # from the single RGB space point
 def do_step_search(color_result, fit_dict, identifier):
     foreground_rgba = color_result[2]
-    print(foreground_rgba)
     background_rgba = color_result[4]
+    if identifier == "t":
+        print(f"The foreground color is now {foreground_rgba}")
+    elif identifier == "b":
+        print(f"The background color is now {background_rgba}")
+
     fdict = color_to_cdict(foreground_rgba)
 
     wall_around = ls.large_step(fdict, 1) + ls.large_step(fdict, 10) + ls.large_step(fdict, 50) + \
@@ -79,35 +83,20 @@ def do_step_search(color_result, fit_dict, identifier):
         wfit_list += Cfv.calculate_fitness_value([new_single_r])
 
 
-    # print(wfit_list)
     max_result = [fit_dict['fitness_value'], foreground_rgba]
 
     better_points = []
-    max_fitness = 0
-    max_fitness_color = None
     for wr, wfl in zip(wall_result, wfit_list):
         if wfl['fitness_value'] > fit_dict['fitness_value']:
             # bp = wr[2]
             bp = wr
             better_points.append((bp, wfl['fitness_value']))
-            if wfl['fitness_value'] > max_fitness:
-                max_fitness = wfl['fitness_value']
-                max_fitness_color = bp
-                # print(max_fitness, max_fitness_color)
 
     # sort better points by their fitness values
     better_points.sort(key=lambda x: x[1], reverse=True)
     # pop 5 best points
     better_points = better_points[:5]
     better_points = [x[0] for x in better_points]
-
-    # if len(better_points) > 0:
-        # print improved fitness
-        # print("NO RANDOM")
-        # print(f"current fitness value = {fit_dict['fitness_value']}")
-        # print(f"improved fitness value = {max_fitness}")
-        # print(f"Then foreground color will be {max_fitness_color}")
-        # print(f"And, background color will be {background_rgba}")
 
     if len(better_points) == 0:
         # print("It's RANDOM")
@@ -116,14 +105,14 @@ def do_step_search(color_result, fit_dict, identifier):
         for i in range(5):
             better_points.append(copy_list[i])
 
-    # print(len(better_points))
     bp_dict = [color_to_cdict(bp) for bp in better_points]
     adj_points = []
     for bd in bp_dict:
         adj_points += ls.small_step(bd, 2, 1) + ls.small_step(bd, 4, 1)
     a_result = []
     afit_list = []
-
+    # print("Adjacent points number -> ")
+    # print(len(adj_points))
 
     for ap in adj_points:
         to_color = cdict_to_color(ap)
@@ -150,12 +139,14 @@ def do_step_search(color_result, fit_dict, identifier):
                 # print(max_max_fitness, max_max_fitness_color)
 
     if len(last_points) > 0:
-        # print("LAST RESULT")
         print(f"current fitness value = {fit_dict['fitness_value']}")
         print(f"improved fitness value = {max_max_fitness}")
-        print(f"Then foreground color will be {max_max_fitness_color}")
-        print(f"And, background color will be {background_rgba}")
-
+        if identifier == "t":
+            print(f"Then foreground color will be {max_max_fitness_color}")
+            print(f"And, background color will be {background_rgba}")
+        elif identifier == "b":
+            print(f"Then foreground color will be {foreground_rgba}")
+            print(f"And, background color will be {max_max_fitness_color}")
     return max_max_fitness_color, max_max_fitness
 
 

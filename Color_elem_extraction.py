@@ -10,7 +10,8 @@ def color_element_from_url(browser, url):
     # browser.get(url)
 
     # Find elements which contain 'color' in style attribute
-    candi_elems = browser.find_elements_by_xpath("//*[contains (@ style, 'color')]")
+    candi_elems = browser.find_elements_by_xpath("//*[contains(@style, 'color') and \
+                                                    not (contains(@style, 'background'))]")
     result = []
 
     index = 1
@@ -45,5 +46,7 @@ def color_element_from_url(browser, url):
 if __name__ == "__main__":
     test_url = "https://sattamatkamarket.in/"
     browser = webdriver.Chrome(ChromeDriverManager().install())
-    browser.get(test_url)
-    print(color_element_from_url(browser, test_url))
+    browser.get("C:/CS454-Team-28-repository/example_3.html")
+    cee_test = color_element_from_url(browser, test_url)
+    # for i in cee_test:
+    #    print(i)
