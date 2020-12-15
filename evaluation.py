@@ -10,6 +10,7 @@ import First_search
 import change_color
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+import time
 
 test_url_1 = "https://sattamatkamarket.in/"
 test_url_2 = "https://matkaguru.in/"
@@ -19,6 +20,8 @@ test_url_5 = "https://www.theworldsworstwebsiteever.com/"  # Only 5 elements
 fitness_th = 3 # A standard for how bad the user would consider bad
 
 if __name__ == "__main__":
+    start_time = time.time()
+
     browser = webdriver.Chrome(ChromeDriverManager().install())
     # Project repository, it can be different
     # browser.get("C:/CS454-Team-28-repository/worst_web_page_example.html")
@@ -53,3 +56,6 @@ if __name__ == "__main__":
             change_color.change_color(browser, Cee_result[i][1], to_color, "t")
 
     print(f"Solved {solved_issues}/{total_issues} issues.")
+
+    end_time = time.time()
+    print(f"Total {end_time-start_time:.1f} s elapsed.")

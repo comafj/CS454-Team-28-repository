@@ -85,11 +85,17 @@ def do_step_search(color_result, fit_dict):
         if wfl['fitness_value'] > fit_dict['fitness_value']:
             # bp = wr[2]
             bp = wr
-            better_points.append(bp)
+            better_points.append((bp, wfl['fitness_value']))
             if wfl['fitness_value'] > max_fitness:
                 max_fitness = wfl['fitness_value']
                 max_fitness_color = bp
                 # print(max_fitness, max_fitness_color)
+
+    # sort better points by their fitness values
+    better_points.sort(key=lambda x: x[1], reverse=True)
+    # pop 5 best points
+    better_points = better_points[:5]
+    better_points = [x[0] for x in better_points]
 
     # if len(better_points) > 0:
         # print improved fitness
