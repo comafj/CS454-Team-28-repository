@@ -25,7 +25,7 @@ if __name__ == "__main__":
     browser = webdriver.Chrome(ChromeDriverManager().install())
     # Project repository, it can be different
     # browser.get("C:/CS454-Team-28-repository/worst_web_page_example.html")
-    browser.get("C:/CS454-Team-28-repository/example_4.html")
+    browser.get("C:/CS454-Team-28-repository/example_3.html")
     # get color elements from url
     Cee_result = Cee.color_element_from_url(browser, test_url_1)
 
@@ -35,6 +35,8 @@ if __name__ == "__main__":
     total_issues = 0
     solved_issues = 0
     improve_ratio = 1.2
+    # Identifier decides whether to change text or background.
+    identifier= 't'
 
     # For each elements, search new color which can improve fitness value.
     for i, (cr, fdl) in enumerate(zip(Cee_result, fit_dict_list)):
@@ -43,7 +45,9 @@ if __name__ == "__main__":
 
             # Search new color.
             print("DOING STEP SEARCH...")
-            max_fitness_color, max_fitness = First_search.do_step_search(cr, fdl)
+            max_fitness_color, max_fitness = First_search.do_step_search(cr, fdl, identifier)
+            if max_fitness_color == None:
+                continue
 
             # Count it if it solves the color problem.
             if max_fitness > improve_ratio * fdl['fitness_value']:
@@ -53,7 +57,10 @@ if __name__ == "__main__":
             blue = ('0x%0.2X' % max_fitness_color.blue)[2:]
             to_color = f"#{red}{green}{blue}"
             # Change the color of elements to solve color problem.
-            change_color.change_color(browser, Cee_result[i][1], to_color, "t")
+            if identifier== 't':
+                change_color.change_color(browser, Cee_result[i][1], to_color, "t")
+            elif identifier== 'b':
+                change_color.change_color(browser, Cee_result[i][3], to_color, "b")
 
     print(f"Solved {solved_issues}/{total_issues} issues.")
 

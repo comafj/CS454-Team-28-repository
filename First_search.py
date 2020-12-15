@@ -56,7 +56,7 @@ def do_compact_search(color_result, fit_dict):
 
 # Finding method by searching large range and small range in turn
 # from the single RGB space point
-def do_step_search(color_result, fit_dict):
+def do_step_search(color_result, fit_dict, identifier):
     foreground_rgba = color_result[2]
     print(foreground_rgba)
     background_rgba = color_result[4]
@@ -67,13 +67,22 @@ def do_step_search(color_result, fit_dict):
 
     wall_result = []
     wfit_list = []
-    for wa in wall_around:
-        to_color = cdict_to_color(wa)
-        new_single_r = color_result  # Because it is shallow copy, all new_single_r are same instances.
-        new_single_r[2] = to_color
-        # wall_result.append(new_single_r)
-        wall_result.append(to_color)
-        wfit_list += Cfv.calculate_fitness_value([new_single_r])
+    if identifier== 't':
+        for wa in wall_around:
+            to_color = cdict_to_color(wa)
+            new_single_r = color_result  # Because it is shallow copy, all new_single_r are same instances.
+            new_single_r[2] = to_color
+            # wall_result.append(new_single_r)
+            wall_result.append(to_color)
+            wfit_list += Cfv.calculate_fitness_value([new_single_r])
+    elif identifier== 'b':
+        for wa in wall_around:
+            to_color = cdict_to_color(wa)
+            new_single_r = color_result  # Because it is shallow copy, all new_single_r are same instances.
+            new_single_r[4] = to_color
+            # wall_result.append(new_single_r)
+            wall_result.append(to_color)
+            wfit_list += Cfv.calculate_fitness_value([new_single_r])
 
     # print(wfit_list)
     max_result = [fit_dict['fitness_value'], foreground_rgba]
@@ -120,13 +129,22 @@ def do_step_search(color_result, fit_dict):
     a_result = []
     afit_list = []
 
-    for ap in adj_points:
-        to_color = cdict_to_color(ap)
-        new_single_r = color_result  # Because it is shallow copy, all new_single_r are same instances.
-        new_single_r[2] = to_color
-        # wall_result.append(new_single_r)
-        a_result.append(to_color)
-        afit_list += Cfv.calculate_fitness_value([new_single_r])
+    if identifier== 't':
+        for ap in adj_points:
+            to_color = cdict_to_color(ap)
+            new_single_r = color_result  # Because it is shallow copy, all new_single_r are same instances.
+            new_single_r[2] = to_color
+            # wall_result.append(new_single_r)
+            a_result.append(to_color)
+            afit_list += Cfv.calculate_fitness_value([new_single_r])
+    elif identifier== 'b':
+        for ap in adj_points:
+            to_color = cdict_to_color(ap)
+            new_single_r = color_result  # Because it is shallow copy, all new_single_r are same instances.
+            new_single_r[4] = to_color
+            # wall_result.append(new_single_r)
+            a_result.append(to_color)
+            afit_list += Cfv.calculate_fitness_value([new_single_r])
 
     last_points = []
     max_max_fitness = 0
