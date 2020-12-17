@@ -136,18 +136,15 @@ def do_step_search(color_result, fit_dict, identifier):
             if afl['fitness_value'] > max_max_fitness:
                 max_max_fitness = afl['fitness_value']
                 max_max_fitness_color = bp
-                # print(max_max_fitness, max_max_fitness_color)
 
     if len(last_points) > 0:
         print(f"current fitness value = {fit_dict['fitness_value']}")
         print(f"improved fitness value = {max_max_fitness}")
         if identifier == "t":
             print(f"Then foreground color will be {max_max_fitness_color}")
-            print(f"And, background color will be {background_rgba}")
         elif identifier == "b":
-            print(f"Then foreground color will be {foreground_rgba}")
             print(f"And, background color will be {max_max_fitness_color}")
-    return max_max_fitness_color, max_max_fitness
+    return max_max_fitness_color, max_max_fitness-fit_dict['fitness_value']
 
 
 if __name__ == "__main__":

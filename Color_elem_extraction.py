@@ -5,7 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 # It is a function to extract colored element in the given URL or some html file
 # First 2 lines of the definition make it extract from the URL
 # If not it can be used for some html file by setting the browser
-def color_element_from_url(browser, url):
+def color_element_from_url(browser):
     # browser = webdriver.Chrome(ChromeDriverManager().install())
     # browser.get(url)
 

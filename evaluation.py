@@ -8,6 +8,7 @@ import Local_search as ls
 import random
 import First_search
 import change_color
+import Second_search
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import time
@@ -27,7 +28,7 @@ if __name__ == "__main__":
     # browser.get("C:/CS454-Team-28-repository/worst_web_page_example.html")
     browser.get("C:/CS454-Team-28-repository/example_4.html")
     # get color elements from url
-    Cee_result = Cee.color_element_from_url(browser, test_url_1)
+    Cee_result = Cee.color_element_from_url(browser)
 
     # calculate fitness values of color elements.
     fit_dict_list = Cfv.calculate_fitness_value(Cee_result)
@@ -35,9 +36,10 @@ if __name__ == "__main__":
     total_issues = 0
     solved_issues = 0
     improve_ratio = 1.2
+    inter_result = []
     # Identifier decides whether to change text or background.
     # 't' for text, 'b' for background
-    identifier= 't'
+    identifier = 't'
 
     # For each elements, search new color which can improve fitness value.
     for i, (cr, fdl) in enumerate(zip(Cee_result, fit_dict_list)):
@@ -46,24 +48,28 @@ if __name__ == "__main__":
 
             # Search new color.
             print("DOING STEP SEARCH...")
-            max_fitness_color, max_fitness = First_search.do_step_search(cr, fdl, identifier)
-            if max_fitness_color == None:
+            text_change_color, text_imp_fitness = First_search.do_step_search(cr, fdl, 't')
+            back_change_color, back_imp_fitness = First_search.do_step_search(cr, fdl, 'b')
+            # Continue if there is no chance of improvement in both colors
+            if (text_change_color == None) and (back_change_color == None):
                 continue
 
             # Count it if it solves the color problem.
-            if max_fitness > improve_ratio * fdl['fitness_value']:
+            if text_imp_fitness + fdl['fitness_value'] > improve_ratio * fdl['fitness_value']:
                 solved_issues += 1
-            red = ('0x%0.2X' % max_fitness_color.red)[2:]
-            green = ('0x%0.2X' % max_fitness_color.green)[2:]
-            blue = ('0x%0.2X' % max_fitness_color.blue)[2:]
-            to_color = f"#{red}{green}{blue}"
+
             # Change the color of elements to solve color problem.
-            if identifier == 't':
-                change_color.change_color(browser, Cee_result[i][1], to_color, "t")
-            elif identifier == 'b':
-                change_color.change_color(browser, Cee_result[i][3], to_color, "b")
+            if text_change_color != None:
+                text_to_color = change_color.color_to_format(text_change_color)
+                inter_result.append([Cee_result[i][1], change_color.color_to_format(Cee_result[i][2]), \
+                                     text_to_color, text_imp_fitness, "t"])
+            if back_change_color != None:
+                back_to_color = change_color.color_to_format(back_change_color)
+                inter_result.append([Cee_result[i][3], change_color.color_to_format(Cee_result[i][4]), \
+                                     back_to_color, back_imp_fitness, "b"])
 
-    print(f"Solved {solved_issues}/{total_issues} issues.")
-
+    # print(f"Solved {solved_issues}/{total_issues} issues.")
+    # print(inter_result)
+    Second_search.combi_search(browser, inter_result)
     end_time = time.time()
     print(f"Total {end_time-start_time:.1f} s elapsed.")
