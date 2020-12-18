@@ -34,7 +34,7 @@ def gold_ratio(browser):
     b_ratio = color_ratio[0] / color_ratio[2]
     s_ratio = color_ratio[1] / color_ratio[2]
     golden = (b_ratio - 6) / 9 + (s_ratio - 3) / 9
-    return abs(golden)
+    return 1-abs(golden)
 
 
 def calc_fit(browser):
